@@ -1,10 +1,12 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include <vector>
+#include <map>
 #include <string>
-#include "./EntityManager.h"
+#include <vector>
+
 #include "./Component.h"
+#include "./EntityManager.h"
 
 class Component;
 class EntityManager;
@@ -14,6 +16,7 @@ class Entity {
     EntityManager& manager;
     bool isActive;
     std::vector<Component*> components;
+    std::map<const std::type_info*, Component*> componentTypeMap;
 
   public:
     std::string name;
@@ -30,8 +33,15 @@ class Entity {
 
         newComponent->owner = this;
         components.emplace_back(newComponent);
+        componentTypeMap[&typeid(*newComponent)] = newComponent;
+
         newComponent->Initialize();
         return *newComponent;
+    }
+
+    template <typename T>
+    T* GetComponent() {  // TODO change this to GetComponentType()
+        return static_cast<T*>(componentTypeMap[&typeid(T)]);
     }
 };
 
