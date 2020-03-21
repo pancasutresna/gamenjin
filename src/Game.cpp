@@ -1,14 +1,16 @@
-#include <iostream>
-#include "./Constants.h"
 #include "./Game.h"
+
+#include <iostream>
+
+#include "../lib/glm/glm.hpp"
 #include "./AssetManager.h"
-#include "./Map.h"
-#include "./Components/TransformComponent.h"
-#include "./Components/SpriteComponent.h"
 #include "./Components/ColliderComponent.h"
 #include "./Components/KeyboardControlComponent.h"
+#include "./Components/SpriteComponent.h"
 #include "./Components/TextLabelComponent.h"
-#include "../lib/glm/glm.hpp"
+#include "./Components/TransformComponent.h"
+#include "./Constants.h"
+#include "./Map.h"
 
 EntityManager manager;
 AssetManager* Game::assetManager = new AssetManager(&manager);
@@ -69,6 +71,7 @@ void Game::LoadLevel(int levelNumber) {
     assetManager->AddTexture("radar-image", std::string("./assets/images/radar.png").c_str());
     assetManager->AddTexture("jungle-tiletexture", std::string("./assets/tilemaps/jungle.png").c_str());
     assetManager->AddTexture("heliport-image", std::string("./assets/images/heliport.png").c_str());
+    assetManager->AddTexture("collision-texture", std::string("./assets/images/collision-texture.png").c_str());
     assetManager->AddFont("charriot-font", std::string("./assets/fonts/charriot.ttf").c_str(), 14);
 
     map = new Map("jungle-tiletexture", 2, 32);
@@ -94,8 +97,8 @@ void Game::LoadLevel(int levelNumber) {
     radarEntity.AddComponent<TransformComponent>(720, 15, 0, 0, 64, 64, 1);
     radarEntity.AddComponent<SpriteComponent>("radar-image", 8, 150, false, true);
 
-    //Entity& labelLevelName(manager.AddEntity("LabelLevelName", UI_LAYER));
-    //labelLevelName.AddComponent<TextLabelComponent>(10, 10, "First Level...", "charriot-font", WHITE_COLOR);
+    Entity& labelLevelName(manager.AddEntity("LabelLevelName", UI_LAYER));
+    labelLevelName.AddComponent<TextLabelComponent>(10, 10, "First Level...", "charriot-font", WHITE_COLOR);
 }
 
 void Game::ProcessInput() {
